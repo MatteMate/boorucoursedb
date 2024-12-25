@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booru Site</title>
+    <link rel="stylesheet" href="/style.css"> <!-- Підключення стилів -->
+</head>
+<body>
+<h1>Recent Posts</h1>
+<div id="post-container"></div>
+<div id="tag-info-modal" style="display: none;">
+    <div class="modal-content">
+        <span id="close-tag-info" class="close">&times;</span>
+        <div id="tag-info-text"></div>
+    </div>
+</div>
+<div id="user-info-modal">
+    <div class="modal-content">
+        <p id="user-info-text"></p>
+        <span id="close-user-info">X</span>
+    </div>
+</div>
+<!-- Upload Post Popup -->
+<div id="upload-post-popup" class="popup">
+    <form id="upload-post-form">
+        <h2>Upload Post</h2>
+        <label for="file">Choose file:</label>
+        <input type="file" id="file" name="file" required><br><br>
+
+        <label for="uploader">Choose uploader:</label>
+        <select id="uploader" name="uploader" required></select><br><br>
+
+        <label for="likes">Likes:</label>
+        <input type="number" id="likes" name="likes" min="0" required><br><br>
+
+        <label for="sensitive">Sensitive:</label>
+        <input type="checkbox" id="sensitive" name="sensitive"><br><br>
+
+        <label for="tags">Tags:</label>
+        <select id="tag-select">
+            <option value="">Select a tag</option>
+        </select>
+        <div id="selected-tags"></div><br><br>
+
+        <button type="submit">Upload Post</button>
+        <button type="button" id="close-popup">Close</button>
+    </form>
+</div>
+<button id="open-popup">Upload Post</button>
+<!-- Add Tag Popup -->
+<div id="add-tag-popup" class="popup">
+    <form id="add-tag-form">
+        <h2>Add Tag</h2>
+        <label for="tag-name">Tag Name:</label>
+        <input type="text" id="tag-name" name="tag-name" required><br><br>
+
+        <label for="tag-description">Description:</label>
+        <input type="text" id="tag-description" name="tag-description"><br><br>
+
+        <label for="tag-type">Tag Type:</label>
+        <select id="tag-type" name="tag-type" required>
+            <option value="0">Artist</option>
+            <option value="1">Copyright</option>
+            <option value="2">Character</option>
+            <option value="3">General</option>
+        </select><br><br>
+
+        <button type="submit">Add Tag</button>
+        <button type="button" id="close-add-tag-popup">Close</button>
+    </form>
+</div>
+<button id="open-add-tag-popup">Add Tag</button>
+<!-- Add Comment Popup -->
+<div id="add-comment-popup" class="popup">
+    <form id="add-comment-form">
+        <h2>Add Comment</h2>
+        <label for="comment-text">Comment:</label>
+        <input type="text" id="comment-text" name="comment-text" required><br><br>
+
+        <label for="comment-author">Author:</label>
+        <select id="comment-author" name="comment-author" required>
+            <option value="" selected></option>
+        </select><br><br>
+
+        <label for="comment-post">Post:</label>
+        <select id="comment-post" name="comment-post" required>
+            <option value="" selected></option>
+        </select><br><br>
+
+        <button type="submit">Add Comment</button>
+        <button type="button" id="close-add-comment-popup">Close</button>
+    </form>
+</div>
+<button id="open-add-comment-popup">Add Comment</button>
+<!-- Add Uploader Popup -->
+<div id="add-uploader-popup" class="popup">
+    <form id="add-uploader-form">
+        <h2>Add Uploader</h2>
+        <label for="uploader-name">Name:</label>
+        <input type="text" id="uploader-name" name="uploader-name" required><br><br>
+
+        <label for="uploader-description">Description:</label>
+        <input type="text" id="uploader-description" name="uploader-description"><br><br>
+
+        <label for="uploader-reputation">Reputation:</label>
+        <input type="number" id="uploader-reputation" name="uploader-reputation" required><br><br>
+
+        <label for="uploader-status">Online:</label>
+        <input type="checkbox" id="uploader-status" name="uploader-status"><br><br>
+
+        <label for="uploader-admin">Admin:</label>
+        <input type="checkbox" id="uploader-admin" name="uploader-admin"><br><br>
+
+        <button type="submit">Add Uploader</button>
+        <button type="button" id="close-add-uploader-popup">Close</button>
+    </form>
+</div>
+<button id="open-add-uploader-popup">Add Uploader</button>
+<script src="/script.js"></script> <!-- Підключення JS -->
+</body>
+</html>
