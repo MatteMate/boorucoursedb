@@ -1,0 +1,4 @@
+SELECT * 
+FROM tovar 
+WHERE Price BETWEEN 20 AND 100 
+AND NaSklade >= 15
