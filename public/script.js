@@ -1,11 +1,9 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const postContainer = document.getElementById('post-container');
-    const infoModal = document.getElementById('tag-info-modal'); // Модальне вікно для опису тегу або користувача
-    const infoText = document.getElementById('tag-info-text'); // Текстовий елемент для опису
-    const closeInfo = document.getElementById('close-tag-info'); // Кнопка закриття модального вікна
+    const infoModal = document.getElementById('tag-info-modal');
+    const infoText = document.getElementById('tag-info-text');
+    const closeInfo = document.getElementById('close-tag-info');
 
-
-    // Перевірка існування кнопки закриття для модального вікна
     if (closeInfo) {
         closeInfo.addEventListener('click', () => {
             infoModal.style.display = 'none';
@@ -13,7 +11,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     try {
-        // Виконуємо запит до API
         const response = await fetch('/api/posts');
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
@@ -26,7 +23,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        // Підраховуємо кількість постів для кожного тегу
         const tagCount = {
             artist: {},
             copyrights: {},
@@ -41,15 +37,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             post.general_tags?.forEach(tag => tagCount.general[tag] = (tagCount.general[tag] || 0) + 1);
         });
 
-        // Додаємо пости
         posts.forEach(post => {
             const postElement = document.createElement('div');
             postElement.classList.add('post');
 
-            // Шлях до зображення
-            const imgPath = post.path_to_file.replace(/^.*[\\\/]/, 'posts/'); // Замінюємо шлях
+            const imgPath = post.path_to_file.replace(/^.*[\\\/]/, 'posts/');
 
-            // Функція для обробки тегів без останньої коми та null значень
             const formatTags = (tags, tagClass) => {
                 tags = tags.filter(tag => tag != null);
                 if (tags.length === 0) return '';
@@ -74,7 +67,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <p><strong>Upload Time:</strong> ${new Date(post.upload_time).toLocaleString()}</p>
                     <p><strong>Rating:</strong> ${post.rating}</p>
 
-                    <!-- Теги: 4 колонки -->
                     <div class="tags">
                         <div class="tags-column">
                             <h4>Artist</h4>
@@ -104,13 +96,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             `;
             postContainer.appendChild(postElement);
 
-            // Обробка кліку на ім'я користувача в пості
             const userNameElement = postElement.querySelector('.user-name');
             if (userNameElement) {
                 userNameElement.addEventListener('click', () => {
                     const username = userNameElement.getAttribute('data-username');
-                    // Відображаємо модальне вікно з інформацією про користувача
-                    const user = posts.find(p => p.uploader_name === username); // Знаходимо користувача
+                    const user = posts.find(p => p.uploader_name === username);
 
                     if (user) {
                         infoText.innerHTML = `
@@ -123,7 +113,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                             <p><strong>Reputation:</strong> ${user.reputation}</p>
                         `;
 
-                        // Позиціонуємо модальне вікно справа від курсора
                         const rect = userNameElement.getBoundingClientRect();
                         infoModal.style.left = `${rect.left + window.scrollX + userNameElement.offsetWidth + 5}px`;
                         infoModal.style.top = `${rect.top + window.scrollY}px`;
@@ -133,13 +122,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                 });
             }
 
-            // Обробка кліку на ім'я користувача в коментарях
             const commentUserElements = postElement.querySelectorAll('.comments .user-name');
             commentUserElements.forEach(commentUserElement => {
                 commentUserElement.addEventListener('click', () => {
                     const username = commentUserElement.getAttribute('data-username');
-                    // Відображаємо модальне вікно з інформацією про користувача
-                    const user = posts.find(p => p.uploader_name === username); // Знаходимо користувача
+                    const user = posts.find(p => p.uploader_name === username);
 
                     if (user) {
                         infoText.innerHTML = `
@@ -152,7 +139,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                             <p><strong>Reputation:</strong> ${user.reputation}</p>
                         `;
 
-                        // Позиціонуємо модальне вікно справа від курсора
                         const rect = commentUserElement.getBoundingClientRect();
                         infoModal.style.left = `${rect.left + window.scrollX + commentUserElement.offsetWidth + 5}px`;
                         infoModal.style.top = `${rect.top + window.scrollY}px`;
@@ -162,7 +148,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 });
             });
 
-            // Обробка наведення на тег
             const tags = postElement.querySelectorAll('.tags span');
             tags.forEach(tagElement => {
                 tagElement.addEventListener('click', () => {
@@ -171,7 +156,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                     if (tagInfo) {
                         infoText.innerHTML = `<strong>${tagName}</strong><br>${tagInfo.description}`;
 
-                        // Позиціонуємо модальне вікно справа від курсора
                         const rect = tagElement.getBoundingClientRect();
                         infoModal.style.left = `${rect.left + window.scrollX + tagElement.offsetWidth + 5}px`;
                         infoModal.style.top = `${rect.top + window.scrollY}px`;
@@ -198,17 +182,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     const selectedTagsContainer = document.getElementById('selected-tags');
     const sensitiveCheckbox = document.getElementById('sensitive');
 
-    // Show popup
     openPopupButton.addEventListener('click', () => {
         popup.style.display = 'block';
     });
 
-    // Hide popup
     closePopupButton.addEventListener('click', () => {
         popup.style.display = 'none';
     });
 
-    // Fetch and populate uploader options
     try {
         const response = await fetch('/api/uploaders');
         if (!response.ok) {
@@ -225,7 +206,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error('Failed to fetch uploaders:', err);
     }
 
-    // Fetch and populate tag options
     try {
         const tagResponse = await fetch('/api/tags');
         if (!tagResponse.ok) {
@@ -242,7 +222,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error('Failed to fetch tags:', err);
     }
 
-    // Handle tag selection
     tagSelect.addEventListener('change', () => {
         const selectedTag = tagSelect.options[tagSelect.selectedIndex];
         if (selectedTag.value) {
@@ -257,7 +236,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         tagElement.innerHTML = `<span>${tagName}</span><button type="button" data-tag-id="${tagId}">x</button>`;
         selectedTagsContainer.appendChild(tagElement);
 
-        // Handle tag removal
         const removeBtn = tagElement.querySelector('button');
         removeBtn.addEventListener('click', () => {
             selectedTagsContainer.removeChild(tagElement);
@@ -267,26 +245,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
 
-        // Debug log: ensures this event is firing
         console.log('Form submission initiated...');
 
         const formData = new FormData();
         const selectedTags = Array.from(
             selectedTagsContainer.querySelectorAll('.selected-tag button')
         ).map(button => {
-            // We’ll append the button's text, not just the ID
-            // because our server expects the actual tag text for insertion.
             return button.parentNode.querySelector('span').textContent;
         });
 
-        // Full console output for debugging
         console.log('Selected tags:', selectedTags);
 
         formData.append('file', fileInput.files[0]);
         formData.append('uploader', uploaderSelect.value);
         formData.append('likes', document.getElementById('likes').value);
         formData.append('sensitive', sensitiveCheckbox.checked);
-        // Join tags with commas to match server code
         formData.append('tags', selectedTags.join(','));
 
         try {
@@ -300,7 +273,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 alert('Post uploaded successfully!');
                 console.log('Post upload success');
                 popup.style.display = 'none';
-                // Optionally refresh or fetch the new posts list here
             } else {
                 alert('Failed to upload post.');
                 console.log('Upload failed with status:', response.status);
@@ -317,12 +289,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     const addTagPopup = document.getElementById('add-tag-popup');
     const addTagForm = document.getElementById('add-tag-form');
 
-    // Show Add Tag popup
     openAddTagPopupButton.addEventListener('click', () => {
         addTagPopup.style.display = 'block';
     });
 
-    // Hide Add Tag popup
     closeAddTagPopupButton.addEventListener('click', () => {
         addTagPopup.style.display = 'none';
     });
@@ -363,17 +333,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     const commentAuthorSelect = document.getElementById('comment-author');
     const commentPostSelect = document.getElementById('comment-post');
 
-    // Show Add Comment popup
     openAddCommentPopupButton.addEventListener('click', () => {
         addCommentPopup.style.display = 'block';
     });
 
-    // Hide Add Comment popup
     closeAddCommentPopupButton.addEventListener('click', () => {
         addCommentPopup.style.display = 'none';
     });
 
-    // Fetch and populate author options
     const authorResponse = await fetch('/api/uploaders');
     const authors = await authorResponse.json();
     authors.forEach(author => {
@@ -383,7 +350,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         commentAuthorSelect.appendChild(option);
     });
 
-    // Fetch and populate post options
     const postResponse = await fetch('/api/posts');
     const posts = await postResponse.json();
     posts.forEach(post => {
@@ -427,12 +393,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     const addUploaderPopup = document.getElementById('add-uploader-popup');
     const addUploaderForm = document.getElementById('add-uploader-form');
 
-    // Show Add Uploader popup
     openAddUploaderPopupButton.addEventListener('click', () => {
         addUploaderPopup.style.display = 'block';
     });
 
-    // Hide Add Uploader popup
     closeAddUploaderPopupButton.addEventListener('click', () => {
         addUploaderPopup.style.display = 'none';
     });
